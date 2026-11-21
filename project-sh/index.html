@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>من البيانات إلى القرارات الاقتصادية</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 85% 15%, #164e6380, transparent 35%),
+    radial-gradient(circle at 10% 90%, #312e8170, transparent 35%),
+    #080d19;
+  color: #f1f5f9;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 6%;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+  direction: ltr;
+  letter-spacing: 2px;
+}
+
+.logo span {
+  color: #38bdf8;
+}
+
+.top-label {
+  color: #a5b4c8;
+}
+
+.presentation {
+  width: 90%;
+  max-width: 1150px;
+  min-height: 600px;
+  margin: 20px auto;
+  padding: 45px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #38bdf855;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #142238, #0c1526);
+  box-shadow: 0 25px 80px #0009;
+}
+
+.slide-number {
+  color: #38bdf8;
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 22px;
+  direction: ltr;
+  text-align: right;
+}
+
+#slide-content h1 {
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 1.4;
+  margin: 0 0 12px;
+  color: #ffffff;
+}
+
+#slide-content h2 {
+  color: #38bdf8;
+  font-size: 21px;
+  font-weight: 500;
+  margin: 0 0 20px;
+  line-height: 1.8;
+}
+
+.slide-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 30px;
+  align-items: center;
+}
+
+.slide-text p {
+  white-space: pre-line;
+  color: #d5deeb;
+  font-size: 21px;
+  line-height: 2;
+  margin: 0;
+}
+
+.slide-image {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid #38bdf855;
+  box-shadow: 0 15px 35px #0008;
+  background: #0b192b;
+}
+
+.slide-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.note {
+  margin-top: 25px;
+  padding: 17px 20px;
+  border-right: 4px solid #38bdf8;
+  background: #38bdf810;
+  border-radius: 12px;
+  color: #bae6fd;
+  font-size: 18px;
+  line-height: 1.9;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 90%;
+  max-width: 1150px;
+  margin: 25px auto 35px;
+}
+
+button {
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  color: #07111e;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 25px;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .3s;
+}
+
+button:hover {
+  transform: translateY(-3px);
+}
+
+button:disabled {
+  opacity: .3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.progress {
+  flex: 1;
+  height: 7px;
+  background: #ffffff20;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#progress {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  transition: width .4s;
+}
+
+#counter {
+  color: #a5b4c8;
+  direction: ltr;
+  font-weight: bold;
+}
+
+@media(max-width:750px) {
+  .presentation {
+    width: 94%;
+    padding: 25px 20px;
+    min-height: 550px;
+  }
+
+  .slide-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .slide-image {
+    height: 220px;
+  }
+
+  .slide-text p {
+    font-size: 18px;
+  }
+
+  .top-label {
+    font-size: 12px;
+  }
+
+  .controls {
+    width: 94%;
+    gap: 8px;
+  }
+
+  button {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="logo">DATA<span>+</span></div>
+  <div class="top-label">من الأرقام إلى القرارات الذكية</div>
+</header>
+
+<main class="presentation">
+  <div class="slide-number" id="number"></div>
+  <div id="slide-content"></div>
+</main>
+
+<footer class="controls">
+  <button id="prev">السابق ←</button>
+  <div class="progress">
+    <div id="progress"></div>
+  </div>
+  <span id="counter"></span>
+  <button id="next">التالي →</button>
+</footer>
+
+<script>
+
+const slides = [
+
+{
+title: "من البيانات إلى القرارات الاقتصادية",
+subtitle: "كيف تتحول الأرقام إلى قوة تصنع مستقبل الشركات والأسواق؟",
+text: "رحلة لفهم كيف تستخدم المؤسسات البيانات لفهم الواقع، واكتشاف الفرص، وتقليل المخاطر، وتحقيق الأرباح.",
+note: "البيانات ليست مجرد أرقام؛ إنها مصدر للقيمة عندما نفهمها ونستخدمها بطريقة صحيحة.",
+image: "photo-1460925895917-afdab827c52f"
+},
+
+{
+title: "لماذا أصبحت البيانات مهمة؟",
+text: "في الماضي كانت كثير من القرارات تعتمد على الخبرة والتوقعات الشخصية.\n\nاليوم تستطيع الشركات تحليل ملايين السجلات لفهم العملاء والسوق والمنافسين.\n\nالبيانات تساعد على الانتقال من التخمين إلى القرار المبني على الأدلة.",
+note: "القرار الجيد لا يعتمد على كثرة البيانات فقط، بل على جودتها وطريقة تحليلها.",
+image: "photo-1551288049-bebda4e38f71"
+},
+
+{
+title: "ما المقصود بالبيانات الاقتصادية؟",
+text: "هي معلومات رقمية أو وصفية تساعدنا على فهم النشاط الاقتصادي.\n\nأمثلة:\n• أسعار المنتجات.\n• حجم المبيعات.\n• تكاليف التشغيل.\n• دخل العملاء.\n• معدلات التضخم.\n• العرض والطلب.",
+note: "كل عملية شراء أو بيع أو إنتاج يمكن أن تترك وراءها بيانات مفيدة.",
+image: "photo-1554224155-6726b3ff858f"
+},
+
+{
+title: "الفرق بين البيانات والمعلومات والمعرفة",
+text: "البيانات: أرقام وحقائق خام.\n\nالمعلومات: بيانات تم تنظيمها وتحليلها.\n\nالمعرفة: فهم ما تعنيه المعلومات.\n\nالقرار: اختيار إجراء عملي بناءً على هذا الفهم.",
+note: "مثال: انخفاض المبيعات بيانات، ومعرفة سبب الانخفاض تحليل، وتغيير استراتيجية التسويق قرار.",
+image: "photo-1518186233392-c232efbf2373"
+},
+
+{
+title: "من أين تأتي البيانات؟",
+text: "أنظمة نقاط البيع.\n\nالمتاجر الإلكترونية.\n\nقواعد بيانات العملاء.\n\nالاستبيانات وأبحاث السوق.\n\nالجهات الإحصائية الرسمية.\n\nأنظمة المحاسبة والمخزون.",
+note: "مصدر البيانات يؤثر على دقتها وموثوقيتها.",
+image: "photo-1556761175-b413da4baf72"
+},
+
+{
+title: "رحلة البيانات من البداية إلى القرار",
+text: "1. تحديد المشكلة الاقتصادية.\n2. جمع البيانات المناسبة.\n3. تنظيف البيانات ومعالجة الأخطاء.\n4. تحليل البيانات.\n5. اكتشاف الأنماط والاتجاهات.\n6. بناء التوصيات.\n7. اتخاذ القرار وقياس النتيجة.",
+note: "لا تبدأ بجمع كل البيانات المتاحة؛ ابدأ بسؤال واضح تريد الإجابة عنه.",
+image: "photo-1460925895917-afdab827c52f"
+},
+
+{
+title: "مثال: لماذا انخفضت المبيعات؟",
+text: "لنفترض أن متجرًا حقق مبيعات قدرها 100,000 ريال في الشهر الماضي.\n\nهذا الشهر أصبحت المبيعات 75,000 ريال.\n\nالانخفاض يساوي 25,000 ريال، أي 25%.\n\nلكن الرقم وحده لا يشرح السبب.",
+note: "المحلل المحترف لا يكتفي بملاحظة الانخفاض، بل يبحث عن أسبابه.",
+image: "photo-1551288049-bebda4e38f71"
+},
+
+{
+title: "كيف نكتشف سبب المشكلة؟",
+text: "نحلل المبيعات حسب:\n\n• المنتجات.\n• الفروع.\n• المناطق الجغرافية.\n• الفترات الزمنية.\n• شرائح العملاء.\n• قنوات البيع.\n\nقد نكتشف أن الانخفاض حدث في منتج معين أو منطقة محددة.",
+note: "تقسيم البيانات إلى مجموعات يساعد على رؤية المشكلة بوضوح.",
+image: "photo-1554224155-6726b3ff858f"
+},
+
+{
+title: "مؤشرات الأداء الاقتصادي",
+text: "Revenue: الإيرادات.\n\nProfit: الأرباح.\n\nCost: التكاليف.\n\nProfit Margin: هامش الربح.\n\nGrowth Rate: معدل النمو.\n\nCustomer Acquisition Cost: تكلفة اكتساب العميل.",
+note: "المؤشر الصحيح يساعد الإدارة على قياس ما يهم فعلاً.",
+image: "photo-1460925895917-afdab827c52f"
+},
+
+{
+title: "دراسة حالة: متجر إلكتروني",
+text: "المتجر يبيع ثلاثة منتجات:\n\nالمنتج A: مبيعات 50,000 ريال.\nالمنتج B: مبيعات 30,000 ريال.\nالمنتج C: مبيعات 20,000 ريال.\n\nإجمالي المبيعات: 100,000 ريال.\n\nلكن هل المنتج A هو الأكثر ربحية؟ ليس بالضرورة!",
+note: "المبيعات المرتفعة لا تعني دائمًا أرباحًا مرتفعة؛ يجب معرفة التكاليف أيضًا.",
+image: "photo-1556761175-b413da4baf72"
+},
+
+{
+title: "كيف تساعد البيانات في تقليل المخاطر؟",
+text: "التنبؤ بانخفاض الطلب.\n\nاكتشاف ارتفاع التكاليف.\n\nمراقبة تأخر المدفوعات.\n\nمعرفة المنتجات بطيئة الحركة.\n\nاكتشاف العمليات غير الطبيعية.\n\nتقدير أثر تغير الأسعار.",
+note: "التحليل لا يزيل المخاطر تمامًا، لكنه يساعد على الاستعداد لها.",
+image: "photo-1518186233392-c232efbf2373"
+},
+
+{
+title: "الأدوات المستخدمة في تحليل البيانات",
+text: "Excel: تنظيم البيانات والتحليل الأولي.\n\nSQL: استخراج البيانات من قواعد البيانات.\n\nPython: التحليل والمعالجة المتقدمة.\n\nPower BI: بناء التقارير ولوحات المعلومات.\n\nTableau: استكشاف البيانات وعرضها بصريًا.",
+note: "الأداة ليست الهدف؛ الهدف هو الوصول إلى إجابة صحيحة لسؤال العمل.",
+image: "photo-1551288049-bebda4e38f71"
+},
+
+{
+title: "من التحليل إلى القرار",
+text: "اكتشاف المشكلة.\n\nفهم أسبابها.\n\nمقارنة الحلول الممكنة.\n\nتقدير التكلفة والعائد.\n\nاختيار الحل الأنسب.\n\nتنفيذ القرار ومراقبة نتائجه.",
+note: "يجب أن تكون التوصية واضحة وقابلة للتنفيذ والقياس.",
+image: "photo-1556761175-b413da4baf72"
+},
+
+{
+title: "التحديات والأخطاء الشائعة",
+text: "بيانات غير دقيقة.\n\nعينة لا تمثل السوق.\n\nالخلط بين الارتباط والسببية.\n\nتجاهل التكاليف.\n\nالاعتماد على مؤشر واحد.\n\nتفسير النتائج دون فهم سياق العمل.",
+note: "قد يؤدي التحليل الخاطئ إلى قرار أسوأ من عدم التحليل.",
+image: "photo-1554224155-6726b3ff858f"
+},
+
+{
+title: "الخلاصة: البيانات تصنع الفرق",
+text: "الشركات الناجحة لا تجمع البيانات لمجرد التخزين.\n\nبل تستخدمها لفهم العملاء، وتحسين العمليات، واكتشاف الفرص، وتقليل الخسائر.\n\nالقيمة الحقيقية تبدأ عندما تتحول البيانات إلى قرار صحيح.",
+note: "السؤال الأخير: ما القرار الذي يمكن أن تتخذه شركة عندما تعرف أن أحد منتجاتها يحقق مبيعات مرتفعة لكنه يسبب خسائر؟",
+image: "photo-1460925895917-afdab827c52f"
+}
+
+];
+
+let current = 0;
+
+const content = document.getElementById("slide-content");
+const number = document.getElementById("number");
+const counter = document.getElementById("counter");
+const progress = document.getElementById("progress");
+
+function showSlide() {
+
+  const slide = slides[current];
+
+  number.textContent = "CHAPTER / " + (current + 1);
+
+  content.innerHTML = `
+    <h1>${slide.title}</h1>
+    ${slide.subtitle ? `<h2>${slide.subtitle}</h2>` : ""}
+
+    <div class="slide-layout">
+
+      <div class="slide-text">
+        <p>${slide.text}</p>
+        <div class="note">${slide.note}</div>
+      </div>
+
+      <div class="slide-image">
+        <img
+          src="https://images.unsplash.com/${slide.image}?auto=format&fit=crop&w=1000&q=85"
+          alt="${slide.title}"
+          onerror="this.style.display='none'">
+      </div>
+
+    </div>
+  `;
+
+  counter.textContent = `${current + 1} / ${slides.length}`;
+
+  progress.style.width =
+    ((current + 1) / slides.length * 100) + "%";
+
+  document.getElementById("prev").disabled = current === 0;
+
+  document.getElementById("next").disabled =
+    current === slides.length - 1;
+}
+
+document.getElementById("next").onclick = () => {
+  if (current < slides.length - 1) {
+    current++;
+    showSlide();
+  }
+};
+
+document.getElementById("prev").onclick = () => {
+  if (current > 0) {
+    current--;
+    showSlide();
+  }
+};
+
+document.addEventListener("keydown", event => {
+  if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+    document.getElementById("next").click();
+  }
+
+  if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+    document.getElementById("prev").click();
+  }
+});
+
+showSlide();
+
+</script>
+
+</body>
+</html>
